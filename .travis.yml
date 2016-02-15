@@ -35,7 +35,7 @@ before_install:
 # we'll put the Kodi source on the same level
 #
 before_script:
-  - cd $TRAVIS_BUILD_DIR/..
+  - cd $TRAVIS_BUILD_DIR/
   - git clone --depth=1 https://github.com/xbmc/xbmc.git
   - cd $TRAVIS_BUILD_DIR/project/cmake/addons
   - mkdir -p build
