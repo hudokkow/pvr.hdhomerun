@@ -29,6 +29,9 @@ matrix:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then which cmake || brew update                   ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then which cmake || brew install cmake            ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install jsoncpp                         ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq                    ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq -y libjsoncpp-dev ; fi
 
 #
 # The addon source is automatically checked out in $TRAVIS_BUILD_DIR,
