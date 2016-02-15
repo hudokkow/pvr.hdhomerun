@@ -1,54 +1,33 @@
 language: cpp
 
-#
-# Define the build matrix
-#
-# Travis defaults to building on Ubuntu Precise when building on 
-# Linux. We need Trusty in order to get up to date versions of 
-# cmake and g++.
-#
-matrix:
-  include:
-    - os: linux
-      dist: trusty    
-      sudo: required
-      compiler: gcc
-    - os: linux
-      dist: trusty    
-      sudo: required
-      compiler: clang
-    - os: osx
-      osx_image: xcode7.3
-    - os: osx
-      osx_image: xcode6.1
+env:
+  global:
+    - APPID=pvr.hdhomerun
 
-#
-# Some of the OS X images don't have cmake, contrary to what people 
-# on the Internet say
-#
-before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then which cmake || brew update                   ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then which cmake || brew install cmake            ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install jsoncpp                         ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq                    ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq -y libjsoncpp-dev ; fi
+os: linux
+dist: trusty
+sudo: required
+compiler:
+  - gcc
+  - clang
 
+# Install dependencies
 #
-# The addon source is automatically checked out in $TRAVIS_BUILD_DIR,
-# we'll put the Kodi source on the same level
+# Install any prerequisites or dependencies necessary to run our builds
 #
 before_script:
-  - cd $TRAVIS_BUILD_DIR/
+  - cd $TRAVIS_BUILD_DIR/..
   - git clone --depth=1 https://github.com/xbmc/xbmc.git
-  - cd $TRAVIS_BUILD_DIR/xbmc/project/cmake/addons
+  - cd xbmc/project/cmake/addons
   - mkdir -p build
   - cd build/
   - cmake ../bootstrap -DCMAKE_BUILD_TYPE=Debug
   - make -j3
+
+# Actually build
+#
+script:
   - cd $TRAVIS_BUILD_DIR/
   - mkdir build
-  - cd build
-  - cmake -DADDONS_TO_BUILD=pvr.hdhomerun -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../xbmc/addons $TRAVIS_BUILD_DIR/xbmc/project/cmake/addons
-  - make -j3
-
-script: make
+  - cmake -DADDONS_TO_BUILD="$APPID" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../addons $TRAVIS_BUILD_DIR/project/cmake/addons
+  - make -j3;
