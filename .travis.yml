@@ -45,10 +45,10 @@ before_script:
   - cd build/
   - cmake ../bootstrap -DCMAKE_BUILD_TYPE=Debug
   - make -j3
-  - cd $TRAVIS_BUILD_DIR/pvr.hdhomerun
+  - cd $TRAVIS_BUILD_DIR/
   - mkdir build
   - cd build
-  - cmake -DADDONS_TO_BUILD=pvr.hdhomerun -DADDON_SRC_PREFIX=../ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../xbmc/addons $TRAVIS_BUILD_DIR/xbmc/project/cmake/addons
+  - cmake -DADDONS_TO_BUILD=pvr.hdhomerun -DADDON_SRC_PREFIX=../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=../xbmc/addons $TRAVIS_BUILD_DIR/xbmc/project/cmake/addons
   - make -j3
 
 script: make
